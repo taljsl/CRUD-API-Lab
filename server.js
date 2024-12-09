@@ -17,9 +17,25 @@ app.use(cors());
 
 const Currency = require("./models/currency.js");
 
+app.get('/currencies', async (req,res) => {
+    const foundCurrencies = await Currency.find()
+    res.json(foundCurrencies)
+})
+
 app.post("/currencies", async (req, res) => {
   const createdCurrency = await Currency.create(req.body);
+  res.json(createdCurrency)
 });
+
+app.delete('/currencies/:currencyId' ,async (req,res) => {
+    const deletedCurrency = await Currency.findByIdAndDelete(req.params.currencyId)
+    res.json(deletedCurrency)
+})
+
+app.put('/currencies/:currencyId', async (req,res) => {
+    const updatedCurrency = await Currency.findByIdAndUpdate(req.params.currencyId, req.body, {new:true})
+    res.json(updatedCurrency)
+})
 
 app.listen(3001, () => {
   console.log("Listening on Port 3001");
